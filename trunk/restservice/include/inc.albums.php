@@ -24,7 +24,7 @@ function get_album($album_id=null,$sel=null) {
 			$query = "SELECT * FROM album WHERE cddbid = \"$album_id\"";
 		}
 	} else {
-		$query = "SELECT * FROM album LIMIT $limit";
+		$query = "SELECT artist,title,cddbid FROM album ORDER BY artist LIMIT $limit";
 	}
 	$result = mysql_query($query) or die('Query failed: ' . mysql_error());
 	while ($line = mysql_fetch_assoc($result)) {

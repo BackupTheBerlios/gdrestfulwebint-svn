@@ -77,8 +77,33 @@ function get_source() { // get_source
 	return(send_request('meta.php/source','get'));
 }
 
-function get_artists($table,$letter) { // get_artists
-	return(send_request('artists.php/'.$table.$letter,'get'));
+function get_artists($table,$letter) { // get different artists from table $table (tracks or album) equal to $letter if set (DISTINCT)
+	if ($table == "albums") {
+		return(send_request('albums.php/artists/'.$letter,'get'));
+	}
+	if ($table == "tracks") {
+		return(send_request('tracks.php/artists/'.$letter,'get'));
+	}
+}
+
+function get_tracks() { // get track list
+	return(send_request('tracks.php/','get'));
+}
+
+function get_track($id) { // get track details
+	return(send_request('tracks.php/'.$id,'get'));
+}
+
+function get_albums() { // get album list
+	return(send_request('albums.php/','get'));
+}
+
+function get_album($id) { // get album details
+	return(send_request('albums.php/'.$id,'get'));
+}
+
+function get_album_tracks($id) { // get album tracks
+	return(send_request('albums.php/'.$id.'/tracks','get'));
 }
 
 function get_audio($trackid,$filename) { // get_artists

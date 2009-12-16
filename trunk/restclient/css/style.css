@@ -147,7 +147,12 @@ a.brslst {
 	text-align : left;
 	vertical-align : top;
 	text-decoration : none;
-	color : #000000;
+	color : #000;
+}
+
+a.brslst_active {
+	color : #fff;	
+	background-color : #000;
 }
 
 a.brslst:hover {
@@ -156,7 +161,7 @@ a.brslst:hover {
 	vertical-align : top;
 	text-decoration : none;
 	color : #ffffff;
-	background-color : #000000;
+	background-color : #000;
 }
 
 div.searchresults {

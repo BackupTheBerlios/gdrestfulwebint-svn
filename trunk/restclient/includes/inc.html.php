@@ -55,7 +55,7 @@ function build_footer() {
   	print "</body>\n</html>\n";
 }
 
-function write_artistlink($prefix, $artist) { // writes artistlink
+function write_artistlink($prefix, $artist, $highlight=null) { // writes artistlink
   global $trunclen;
   if (strlen($artist)>$trunclen){
     $art = substr($artist, 0, $trunclen);
@@ -65,11 +65,14 @@ function write_artistlink($prefix, $artist) { // writes artistlink
     $art = $artist;
     $appendix="";
   }
-  print "<a class=\"brslst\" href=\"".$prefix.urlencode($art)."\">"
-        .$art.$appendix."</a>&nbsp; ";
+	if ($artist == stripslashes($highlight)) {
+		print "<a class=\"brslst brslst_active\" href=\"".$prefix.urlencode($art)."\">".$art.$appendix."</a>&nbsp; ";
+	} else {
+		print "<a class=\"brslst\" href=\"".$prefix.urlencode($art)."\">".$art.$appendix."</a>&nbsp; ";	
+	}
 }
 
-function write_albumlink($prefix, $cddbid, $album) { // writes artistlink
+function write_albumlink($prefix, $cddbid, $album, $highlight=null) { // writes artistlink
   global $trunclen;
   if (strlen($album)>$trunclen){
     $alb = substr($album, 0, $trunclen);
@@ -79,8 +82,12 @@ function write_albumlink($prefix, $cddbid, $album) { // writes artistlink
     $alb = $album;
     $appendix="";
   }
-  print "<a class=\"brslst\" href=\"".$prefix.urlencode($cddbid)."\">"
-        .$alb.$appendix."</a>&nbsp; ";
+	if ($cddbid == stripslashes($highlight)) {
+		print "<a class=\"brslst brslst_active\" href=\"".$prefix.urlencode($cddbid)."\">".$alb.$appendix."</a>&nbsp; ";
+	} else {
+		print "<a class=\"brslst\" href=\"".$prefix.urlencode($cddbid)."\">".$alb.$appendix."</a>&nbsp; ";	
+	}
+  
 }
 
 
@@ -100,16 +107,33 @@ function write_alphabet($prefix, $highlight)
   	print "</script>";
 }
 
-function write_tracklist($json)
+function write_tracklist($tracklist,$artist=null,$title=null,$cddbid=null)
 {
+	global $trackrow_param;
 	print "<table borders='0'>";
-	print "<tr>";
-	print "<th class='brslist_level2'>Artist</th><th class='brslist_level2'>Title</th><th class='brslist_level2'>Length</th><th></th><th></th></tr>";
-	if ($json) { 
-		foreach ($json as $track) {
-			print "<tr>";
-			write_trackrow($track);
-			print "</tr>";
+	write_track_table_head($trackrow_param);
+	if ($tracklist) { 
+		foreach ($tracklist as $track) {
+			if (isset($artist)) {
+				if (preg_match("/^".stripslashes($artist)."/i", $track->artist)) {
+					$json = json_decode(get_track($track->id));
+					print "<tr>";
+					write_trackrow($json,$trackrow_param);
+					print "</tr>";
+				}
+			} elseif (isset($title)) {
+				if (preg_match("/^".stripslashes($title)."/i", $track->title)) {
+					$json = json_decode(get_track($track->id));
+					print "<tr>";
+					write_trackrow($json,$trackrow_param);
+					print "</tr>";
+				}
+			} else {
+				$json = json_decode(get_track($track->id));
+				print "<tr>";
+				write_trackrow($json,$trackrow_param);
+				print "</tr>";
+			}
 		}
 	}
 	print "</table>";
@@ -124,14 +148,23 @@ function write_edit_button($trackid) {
 	return("<a href=\"action.php?action=edit&id=".$trackid."\" target=\"_blank\"><img src=\"images/icons/16x16/16x16_edit.png\" alt=\"edit\" title=\"Edit Track ".$trackid."\" border=0></a>");
 }
 
-function write_trackrow($track)
+function write_trackrow($track,$trackrow_param=null)
 {
-
 	$style = "brslist_level2";
-	print "<td class=\"".$style."\">".html_entity_decode($track->artist,ENT_COMPAT,"UTF-8")."</td>\n";
-	print "<td class=\"".$style."\">".html_entity_decode($track->title,ENT_COMPAT,"UTF-8")."</td>\n";
-	print "<td class=\"".$style."\">".print_time_string(html_entity_decode($track->length,ENT_COMPAT,"UTF-8"))."</td>\n";
-	print "<td class=\"".$style."\">".write_play_button($track->id,$track->artist,$track->title)."</td>\n";
-	print "<td class=\"".$style."\">".write_edit_button($track->id)."</td>\n";
+	if ($trackrow_param->artist) { print "<td class=\"".$style."\">".html_entity_decode($track->artist,ENT_COMPAT,"UTF-8")."</td>\n"; }
+	if ($trackrow_param->title) { print "<td class=\"".$style."\">".html_entity_decode($track->title,ENT_COMPAT,"UTF-8")."</td>\n"; }
+	if ($trackrow_param->length) { print "<td class=\"".$style."\">".print_time_string(html_entity_decode($track->length,ENT_COMPAT,"UTF-8"))."</td>\n"; }
+	if ($trackrow_param->play) { print "<td class=\"".$style."\">".write_play_button($track->id,$track->artist,$track->title)."</td>\n"; }
+	if ($trackrow_param->edit) { print "<td class=\"".$style."\">".write_edit_button($track->id)."</td>\n"; }
+}
+
+function write_track_table_head($trackrow_param=null)
+{
+	$style = "brslist_level2";
+	if ($trackrow_param->artist) { print "<th class=\"".$style."\">Artist</th>\n"; }
+	if ($trackrow_param->title) { print "<th class=\"".$style."\">Title</th>\n"; }
+	if ($trackrow_param->length) { print "<th class=\"".$style."\">Length</th>\n"; }
+	if ($trackrow_param->play) { print "<th></th>\n"; }
+	if ($trackrow_param->edit) { print "<th></th>\n"; }
 }
 ?>

@@ -12,7 +12,7 @@
    if $sel is given, select only $sel
    if no argument is given, return all tracks limited to $limit
 */
-function get_track($track_id=null,$sel=null) {
+function get_track($track_id=null,$sel=null,$sourceid=null) {
     global $limit;
 	$i = 0;
     $arr = '';
@@ -23,8 +23,10 @@ function get_track($track_id=null,$sel=null) {
 		} else {
 			$query = "SELECT * FROM tracks WHERE id = $track_id";
 		}
+	} elseif (isset($sourceid)) {
+		$query = "SELECT title,artist,id FROM tracks WHERE sourceid = $sourceid ORDER BY title";
 	} else {
-		$query = "SELECT title,artist,id FROM tracks LIMIT $limit";
+		$query = "SELECT title,artist,id FROM tracks ORDER BY title LIMIT $limit";
 	}
 	$result = mysql_query($query) or die ('Query failed: ' . mysql_error());
 	while ($line = mysql_fetch_assoc($result)) {
