@@ -8,7 +8,6 @@ require ("inc.playerstate.php");
 require ("inc.infos.php");
 require ("inc.meta.php");
 require ("inc.id3.php");
-require ("inc.artists.php");
 require ("inc.query.php");
 require ("php-getid3/getid3.php");
 ?>
