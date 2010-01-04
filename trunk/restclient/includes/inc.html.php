@@ -15,7 +15,7 @@ print 	'<html>
 
 <script type="text/javascript" src="js/json2.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
-</head>';
+';
 
 //<script type="text/javascript" src="js/jquery/labs_json.js"></script>
 print "\n\n";
@@ -24,10 +24,10 @@ print "\n\n";
 
 function build_body($title,$class=null,$javascript=null) {
 	if ($class != null) {
-		print 	"<body class='".$class."' ".$javascript.">";
+		print 	"</head><body class='".$class."' ".$javascript.">";
 		print "\n";
 	} else {
-		print 	'<body>';
+		print 	'</head><body>';
 		print "\n";
 	}
 	if (strlen($title)>1){
@@ -36,6 +36,8 @@ function build_body($title,$class=null,$javascript=null) {
 		print "<div class=\"menu".$sel."active\"><a class=\"menu\" href=\"import.php\">Import</a></div>\n";
 		$sel = (strcmp($title, "Browse")==0) ? "" : "in";
 		print "<div class=\"menu".$sel."active\"><a class=\"menu\" href=\"browse.php\">Browse</a></div>\n";
+		$sel = (strcmp($title, "Search")==0) ? "" : "in";
+		print "<div class=\"menu".$sel."active\"><a class=\"menu\" href=\"search.php\">Search</a></div>\n";
 		$sel = (strcmp($title, "Query")==0) ? "" : "in";
 		print "<div class=\"menu".$sel."active\"><a class=\"menu\" href=\"query.php\">Query</a></div>\n";
 		print "</div>\n";
