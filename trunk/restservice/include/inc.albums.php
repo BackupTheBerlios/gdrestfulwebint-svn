@@ -30,9 +30,9 @@ function get_album($album_id=null,$sel=null) {
 	while ($line = mysql_fetch_assoc($result)) {
 		foreach ($line as $key => $col_value) {
 			if (!isset($album_id) && !isset($sel)) {
-				$arr[$i][$key] = htmlspecialchars($col_value);
+				$arr[$i][$key] = utf8_encode($col_value);
 			} else {
-				$arr[$key] = htmlspecialchars($col_value); 
+				$arr[$key] = utf8_encode($col_value); 
 			}
 		}
 		$i++;

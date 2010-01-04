@@ -75,7 +75,7 @@ if (isset($level0)){
 		print "</table>\n";
 		print "</div>\n";
 			
-		if (isset($level2)){ # artist / level 2 specified?
+		if (((isset($level0)) && ($level2 == "") && ($level1 == "")) || ($level2 != "")){  # artist / level 2 specified?
 			print "<div class='searchresults border-left'>\n";
 			$tracklist = json_decode(get_tracks());
 			write_tracklist($tracklist,$level2);
@@ -114,7 +114,7 @@ if (isset($level0)){
 		print "</table>\n";
 		print "</div>\n";
 		
-		if (isset($level2)){ # artist / level 2 specified?
+		if (((isset($level0)) && ($level2 == "") && ($level1 == "")) || ($level2 != "")){  # artist / level 2 specified?
 			print "<div class='searchresults border-left'>\n";
 			print "<table borders=\"0\">\n";		
 			print "<th class='brslist_level2'>Albums</th>";
