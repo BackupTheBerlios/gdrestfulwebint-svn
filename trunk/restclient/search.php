@@ -14,24 +14,112 @@ build_header("Search");
 ?>
 <script>
 	$(document).ready(function(){
-		$('input[name="artist"]').keyup(form_Search_delayed);
-		$('input[name="title"]').keyup(form_Search_delayed);
-//		$('input[name="album"]').keyup(form_Search_delayed);
+		
+		$autocomplete = $('<ul id="autocomplete" class="autocomplete"></ul>')
+		.hide()
+		.insertAfter('#search_form');
+		
+		var selectedItem = null;
+		var setSelectedItem = function(item) {
+			selectedItem = item;
+			if (selectedItem === null) {
+				$autocomplete.hide();
+				return;
+			}
+			if (selectedItem < 0) {
+				selectedItem = 0;
+			}
+			if (selectedItem >= $autocomplete.find('li').length) {
+				selectedItem = $autocomplete.find('li').length - 1;
+			}
+			$autocomplete.find('li').removeClass('selected')
+				.eq(selectedItem).addClass('selected');
+			$autocomplete.show();
+		};
+
+		var populateSearchField = function () {
+			$('input[name='+name+']').val($autocomplete
+			.find('li').eq(selectedItem).text());
+			setSelectedItem(null);
+		};
+		
+		$(':text')
+		.attr('autocomplete', 'off')
+		.keyup(function (event) {
+			if (event.keyCode > 40 || event.keyCode == 8) {
+				name = $(this).attr('name');
+				var txt = $(this).attr('value');
+				var pos=$(this).position();
+				var el=$(this);
+				if(window.SearchTimeout)clearTimeout(window.SearchTimeout);
+				window.SearchTimeout=setTimeout(function () {
+					$.getJSON('includes/inc.search.php?search='+name+'&value='+txt,function (res) { 
+						var left = pos.left;
+						var top = pos.top-7+el.height();
+						var minwidth = el.width()+2;
+						var style = {
+							'left' : left+'px',
+							'top' : top+'px',
+							'min-width' : minwidth+'px'
+						}
+						if (res.results.length) {
+							$autocomplete.empty();
+							$.each(res.results, function (index, term) {
+								$('<li></li>').text(term)
+									.appendTo($autocomplete)
+									.mouseover(function () {
+										setSelectedItem(index);
+									})
+									.click(populateSearchField);
+							});
+							$autocomplete.css(style);
+							setSelectedItem(0);
+						}
+						else {
+							setSelectedItem(null);
+						}
+					});
+				},500);
+			}
+			else if (event.keyCode == 38 && selectedItem !== null) {
+				setSelectedItem(selectedItem - 1);
+				event.preventDefault();
+			}
+			else if (event.keyCode == 40 && selectedItem !== null) {
+				setSelectedItem(selectedItem + 1);
+				event.preventDefault();
+			}
+			else if (event.keyCode == 27 && selectedItem !== null) {
+				setSelectedItem(null);
+			}
+		}).keypress(function(event) {
+			if (event.keyCode == 13 && selectedItem !== null) {
+				populateSearchField();
+				event.preventDefault();
+			}
+		}).blur(function(event) {
+			setTimeout(function() {
+				setSelectedItem(null);
+			}, 250);
+		});
+
 		$('#where').hide();
 		$('#submitbutton').bind('click',fsubmit);
+		
 		$('<div id="loading">Loading ...</div>')
-			.insertBefore('#queryresult')
-			.ajaxStart(function() {
-				$(this).show();
-			}).ajaxStop(function() {
-				$(this).hide();
-			});
+		.insertBefore('#queryresult')
+		.ajaxStart(function() {
+			$(this).show();
+		}).ajaxStop(function() {
+			$(this).hide();
 		});
+		
+	});
+
 	function build_wherestring() {
 		var wherestring = " WHERE ";
 		$('input[name="artist"]') ? wherestring += "artist LIKE '"+$('input[name="artist"]').attr('value')+"%'" : wherestring +="";
 		$('input[name="title"]') ? wherestring += " AND title LIKE '"+$('input[name="title"]').attr('value')+"%'" : wherestring +="";
-//		$('input[name="album"]') ? wherestring += " AND album LIKE '"+$('input[name="album"]').attr('value')+"%'" : wherestring +="";
 		return wherestring;
 	}
 	function fsubmit(){
@@ -40,44 +128,17 @@ build_header("Search");
 		$('#where').html(selectstring+wherestring);
 		$('#where').show();
 		$.post("includes/inc.doquery.php", '{ "query" : "'+selectstring+wherestring+'" }' , function (json) { $('#queryresult').html("").html(json); });
-	}	
-	function form_Search(){
-		$.getJSON('includes/inc.search.php?search='+name+'&value='+txt,form_Search_show);
 	}
-	function form_Search_delayed(){
-		name = $(this).attr('name');
-		txt = $(this).attr('value');
-		pos=$(this).position();
-		el=$(this);
-		if(window.SearchTimeout)clearTimeout(window.SearchTimeout);
-		window.SearchTimeout=setTimeout(form_Search,500);
-	}	
-	function form_Search_show(res){
-		if($('#search_list'))$('#search_list').remove();
-		if(!res.results || !res.results.length)return;
-		var left = pos.left;
-		var top = pos.top+5+el.height();
-		var minwidth = el.width()+2-4;
-		var style='position:absolute;left:'+left+'px;top:'+top+'px;min-width:'+minwidth+'px;border:1px solid #000;background:#eee;padding:2px;';
-		var html='';
-		for(idx in res.results){
-			var result=res.results[idx];
-			html+='<a href="javascript:;" onclick="$(\'input[name='+name+']\').attr(\'value\',\''+result+'\')">'+result+'</a><br />';
-		}
-		$('<div id="search_list" style="'+style+'">'+html+'</div>').appendTo(el[0].parentNode);
-		
-		$(document.body).click(function(){
-			$('#search_list').remove();
-		});
-	}
+
 </script>
+
 <?php build_body("Search"); ?>
 		<div class="results">
 		<div class="searchform">
 		<form id="search_form">
 		<table>
-				<tr><th>Artist</th><td><input name="artist" /></td></tr>
-				<tr><th>Title</th><td><input name="title" /></td></tr>
+				<tr><th>Artist</th><td><input id="artist" name="artist" /></td></tr>
+				<tr><th>Title</th><td><input id="title" name="title" /></td></tr>
 <!--				<tr><th>Album</th><td><input name="album" /></td></tr> -->
 				<tr><th colspan="2" class="but"><input type="reset" value="Clear"><input type="button" id="submitbutton" value="Search"/></th></tr>
 		</table>

@@ -25,7 +25,7 @@ if($search == "album" ) {
 	$json = json_decode(get_albums());
 	if ($json) {
 		foreach ($json as $result) {
-			$results['album'][] = html_entity_decode($result->title,ENT_COMPAT,"UTF-8");
+			$results['albums'][] = html_entity_decode($result->title,ENT_COMPAT,"UTF-8");
 		}
 	}
 }
@@ -40,7 +40,7 @@ if(isset($results[@$search])){
 	}
 }
 
-echo "{'results':[";
-if(count($found))echo "'".join("','",$found)."'";
-echo "]}";
+echo '{ "results" : [ ';
+if(count($found))echo '"'.join('" , "',$found).'"';
+echo ' ] }';
 ?>

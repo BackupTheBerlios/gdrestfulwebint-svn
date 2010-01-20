@@ -223,3 +223,22 @@ div#loading {
 	font-size: 13px;
 	margin : 3px;
 }
+
+ul.autocomplete {
+	border: 1px solid #555;
+	position:absolute;
+	background:#fff;
+	padding:0px;
+	list-style: none;
+	font-size: 12px;
+}
+
+ul.autocomplete li {
+	padding: 2px;
+}
+
+li.selected {
+	color: #fff;
+	background-color : #000;
+	padding: 3px;
+}
