@@ -106,8 +106,8 @@ build_header("Search");
 		$('#where').hide();
 		$('#submitbutton').bind('click',fsubmit);
 		
-		$('<div id="loading">Loading ...</div>')
-		.insertBefore('#queryresult')
+		$('<div id="loading"><img src="images/ajax-loader.gif" />Loading ...</div>')
+		.insertAfter('#search_form')
 		.ajaxStart(function() {
 			$(this).show();
 		}).ajaxStop(function() {
@@ -118,16 +118,16 @@ build_header("Search");
 
 	function build_wherestring() {
 		var wherestring = " WHERE ";
-		$('input[name="artist"]') ? wherestring += "artist LIKE '"+$('input[name="artist"]').attr('value')+"%'" : wherestring +="";
-		$('input[name="title"]') ? wherestring += " AND title LIKE '"+$('input[name="title"]').attr('value')+"%'" : wherestring +="";
+		$('input[name="artist"]') ? wherestring += "artist LIKE \\\""+$('input[name="artist"]').attr('value')+"%\\\"" : wherestring +="";
+		$('input[name="title"]') ? wherestring += " AND title LIKE \\\""+$('input[name="title"]').attr('value')+"%\\\"" : wherestring +="";
 		return wherestring;
 	}
 	function fsubmit(){
 		var selectstring = "SELECT * FROM tracks";
 		var wherestring = (build_wherestring());
-		$('#where').html(selectstring+wherestring);
-		$('#where').show();
-		$.post("includes/inc.doquery.php", '{ "query" : "'+selectstring+wherestring+'" }' , function (json) { $('#queryresult').html("").html(json); });
+		var querystring = selectstring+wherestring+" ORDER BY artist";
+		$('#where').html(querystring).show();
+		$.post("includes/inc.doquery.php", '{ "query" : "'+querystring+'" }' , function (json) { $('#queryresult').html("").html(json); });
 	}
 
 </script>
