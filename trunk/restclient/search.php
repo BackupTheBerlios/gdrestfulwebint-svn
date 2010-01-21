@@ -118,15 +118,14 @@ build_header("Search");
 
 	function build_wherestring() {
 		var wherestring = " WHERE ";
-		$('input[name="artist"]') ? wherestring += "artist LIKE \\\""+$('input[name="artist"]').attr('value')+"%\\\"" : wherestring +="";
-		$('input[name="title"]') ? wherestring += " AND title LIKE \\\""+$('input[name="title"]').attr('value')+"%\\\"" : wherestring +="";
+		$('input[name="artist"]') ? wherestring += "artist LIKE \\\"%"+$('input[name="artist"]').attr('value')+"%\\\"" : wherestring +="";
+		$('input[name="title"]') ? wherestring += " AND title LIKE \\\"%"+$('input[name="title"]').attr('value')+"%\\\"" : wherestring +="";
 		return wherestring;
 	}
 	function fsubmit(){
 		var limit = <?php if (isset($limit)) { echo "' LIMIT $limit'"; } else { echo "' '"; } ?>;
 		var selectstring = "SELECT * FROM tracks";
 		var wherestring = (build_wherestring());
-<<<<<<< .mine
 		var querystring = selectstring+wherestring+" ORDER BY artist"+limit;
 		$('#where').html(querystring).show();
 		$.post("includes/inc.doquery.php", '{ "query" : "'+querystring+'" }' , function (json) { 
@@ -134,12 +133,9 @@ build_header("Search");
 			$('table.tracklist tbody tr:odd').addClass('odd');
 			$('table.tracklist tbody tr:even').addClass('even');
 		});
-
-=======
 		var querystring = selectstring+wherestring+" ORDER BY artist";
 		$('#where').html(querystring).show();
 		$.post("includes/inc.doquery.php", '{ "query" : "'+querystring+'" }' , function (json) { $('#queryresult').html("").html(json); });
->>>>>>> .r9
 	}
 
 </script>
