@@ -9,12 +9,11 @@
 */
 
 require_once "includes/inc.includes.php";   // Include necessary files
-
+$limit = null;
 build_header("Search");
 ?>
 <script>
 	$(document).ready(function(){
-		
 		$autocomplete = $('<ul id="autocomplete" class="autocomplete"></ul>')
 		.hide()
 		.insertAfter('#search_form');
@@ -60,7 +59,8 @@ build_header("Search");
 						var style = {
 							'left' : left+'px',
 							'top' : top+'px',
-							'min-width' : minwidth+'px'
+							'min-width' : minwidth+'px',
+							'white-space' : 'nowrap'
 						}
 						if (res.results.length) {
 							$autocomplete.empty();
@@ -123,11 +123,23 @@ build_header("Search");
 		return wherestring;
 	}
 	function fsubmit(){
+		var limit = <?php if (isset($limit)) { echo "' LIMIT $limit'"; } else { echo "' '"; } ?>;
 		var selectstring = "SELECT * FROM tracks";
 		var wherestring = (build_wherestring());
+<<<<<<< .mine
+		var querystring = selectstring+wherestring+" ORDER BY artist"+limit;
+		$('#where').html(querystring).show();
+		$.post("includes/inc.doquery.php", '{ "query" : "'+querystring+'" }' , function (json) { 
+			$('#queryresult').html("").html(json);
+			$('table.tracklist tbody tr:odd').addClass('odd');
+			$('table.tracklist tbody tr:even').addClass('even');
+		});
+
+=======
 		var querystring = selectstring+wherestring+" ORDER BY artist";
 		$('#where').html(querystring).show();
 		$.post("includes/inc.doquery.php", '{ "query" : "'+querystring+'" }' , function (json) { $('#queryresult').html("").html(json); });
+>>>>>>> .r9
 	}
 
 </script>

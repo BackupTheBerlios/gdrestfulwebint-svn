@@ -2,6 +2,7 @@
 require_once "../includes/inc.includes.php";   // Include necessary files
 $search = $_GET['search'];
 $value = $_GET['value'];
+$limit = 10;
 
 if($search == "artist" ) {
 	$json = json_decode(get_artists("tracks"));
@@ -35,8 +36,16 @@ $found=array();
 if(isset($results[@$search])){
 	$txt=strtolower(@$value);
 	$len=strlen($txt);
+	$i = 0;
 	foreach($results[$search] as $res){
-		if(substr(strtolower($res),0,$len)===$txt)$found[]=addslashes($res);
+		if (isset($limit)) {
+			if( (substr(strtolower($res),0,$len)===$txt) && ($i<$limit) ) {
+				$found[]=addslashes($res);
+				$i++;
+			}
+		} else {
+			if(substr(strtolower($res),0,$len)===$txt)$found[]=addslashes($res);
+		}
 	}
 }
 

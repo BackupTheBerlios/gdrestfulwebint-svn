@@ -112,9 +112,10 @@ function write_alphabet($prefix, $highlight)
 function write_tracklist($tracklist,$artist=null,$title=null,$cddbid=null)
 {
 	global $trackrow_param;
-	print "<table borders='0'>";
+	print "<table class='tracklist' borders='0'>";
 	write_track_table_head($trackrow_param);
 	if ($tracklist) { 
+		print "<tbody>";
 		foreach ($tracklist as $track) {
 			if (isset($artist)) {
 				if (preg_match("/^".stripslashes($artist)."/i", $track->artist)) {
@@ -137,6 +138,7 @@ function write_tracklist($tracklist,$artist=null,$title=null,$cddbid=null)
 				print "</tr>";
 			}
 		}
+		print "</tbody>";
 	}
 	print "</table>";
 }
@@ -163,10 +165,12 @@ function write_trackrow($track,$trackrow_param=null)
 function write_track_table_head($trackrow_param=null)
 {
 	$style = "brslist_level2";
+	print "<thead>";	
 	if ($trackrow_param->artist) { print "<th class=\"".$style."\">Artist</th>\n"; }
 	if ($trackrow_param->title) { print "<th class=\"".$style."\">Title</th>\n"; }
 	if ($trackrow_param->length) { print "<th class=\"".$style."\">Length</th>\n"; }
 	if ($trackrow_param->play) { print "<th></th>\n"; }
 	if ($trackrow_param->edit) { print "<th></th>\n"; }
+	print "</thead>";
 }
 ?>

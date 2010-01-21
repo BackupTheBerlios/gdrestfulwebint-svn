@@ -214,6 +214,14 @@ th.but {
 	text-align : right;
 }
 
+tr.odd {
+	background-color: #fff;
+}
+
+tr.even {
+	background-color: #eee;
+}
+
 div#loading {
 	position: fixed;
 	display : none;
@@ -249,7 +257,7 @@ ul.autocomplete {
 }
 
 ul.autocomplete li {
-	padding: 2px;
+	padding: 4px;
 }
 
 li.selected {
