@@ -1,7 +1,7 @@
 <?php
 require_once "../includes/inc.includes.php";   // Include necessary files
 $search = $_GET['search'];
-$value = $_GET['value'];
+$value = html_entity_decode(stripslashes($_GET['value']),ENT_COMPAT,"UTF-8");
 $limit = 10;
 
 if($search == "artist" ) {
