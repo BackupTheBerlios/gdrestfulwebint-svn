@@ -47,6 +47,7 @@ if(isset($results[@$search])){
 			if(substr(strtolower($res),0,$len)===$txt)$found[]=addslashes($res);
 		}
 	}
+	$found = array_values(array_unique($found));
 }
 
 echo '{ "results" : [ ';
