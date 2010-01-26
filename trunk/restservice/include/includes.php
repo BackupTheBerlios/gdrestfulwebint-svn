@@ -10,5 +10,6 @@ require ("inc.meta.php");
 require ("inc.id3.php");
 require ("inc.query.php");
 require ("inc.artists.php");
+require ("inc.playlists.php");
 require ("php-getid3/getid3.php");
 ?>
