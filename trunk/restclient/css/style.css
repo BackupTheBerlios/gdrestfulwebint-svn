@@ -254,6 +254,7 @@ ul.autocomplete {
 	padding:0px;
 	list-style: none;
 	font-size: 12px;
+	z-index: 10000;
 }
 
 ul.autocomplete li {

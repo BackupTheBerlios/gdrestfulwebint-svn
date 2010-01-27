@@ -136,7 +136,7 @@ function write_tracklist($tracklist,$artist=null,$title=null,$cddbid=null)
 				print "<tr>";
 				write_trackrow($json,$trackrow_param);
 				print "</tr>";
-			}
+			} 
 		}
 		print "</tbody>";
 	}
@@ -155,6 +155,7 @@ function write_edit_button($trackid) {
 function write_trackrow($track,$trackrow_param=null)
 {
 	$style = "brslist_level2";
+	if ($trackrow_param->tracknb) { print "<td class=\"".$style."\">".html_entity_decode($track->tracknb,ENT_COMPAT,"UTF-8")."</td>\n"; }	
 	if ($trackrow_param->artist) { print "<td class=\"".$style."\">".html_entity_decode($track->artist,ENT_COMPAT,"UTF-8")."</td>\n"; }
 	if ($trackrow_param->title) { print "<td class=\"".$style."\">".html_entity_decode($track->title,ENT_COMPAT,"UTF-8")."</td>\n"; }
 	if ($trackrow_param->length) { print "<td class=\"".$style."\">".print_time_string(html_entity_decode($track->length,ENT_COMPAT,"UTF-8"))."</td>\n"; }

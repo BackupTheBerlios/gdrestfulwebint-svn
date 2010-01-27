@@ -49,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') { // GET Request
 if ($_SERVER['REQUEST_METHOD'] == 'POST') { // POST Request
 	$input = file_get_contents("php://input");
 	render_result(create_playlist_entry($input),null,$type); /* create playlist entry */
-}
-*/
+/*}*/
+
 mysql_close($database);
 ?>
 

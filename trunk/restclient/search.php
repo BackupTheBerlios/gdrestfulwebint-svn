@@ -52,34 +52,39 @@ build_header("Search");
 				var el=$(this);
 				if(window.SearchTimeout)clearTimeout(window.SearchTimeout);
 				window.SearchTimeout=setTimeout(function () {
-					$.getJSON('includes/inc.search.php?search='+name+'&value='+txt,function (res) { 
-						var left = pos.left;
-						var top = pos.top-7+el.height();
-						var minwidth = el.width()+2;
-						var style = {
-							'left' : left+'px',
-							'top' : top+'px',
-							'min-width' : minwidth+'px',
-							'white-space' : 'nowrap'
-						}
-						if (res.results.length) {
-							$autocomplete.empty();
-							$.each(res.results, function (index, term) {
-								$('<li></li>').text(term)
-									.appendTo($autocomplete)
-									.mouseover(function () {
-										setSelectedItem(index);
-									})
-									.click(populateSearchField);
-							});
-							$autocomplete.css(style);
-							setSelectedItem(0);
-						}
-						else {
-							setSelectedItem(null);
-						}
-					});
-				},500);
+					if (txt.length > 0) {	
+						$.getJSON('includes/inc.search.php?search='+name+'&value='+txt,function (res) { 
+							var left = pos.left;
+							var top = pos.top-7+el.height();
+							var minwidth = el.width()+2;
+							var style = {
+								'left' : left+'px',
+								'top' : top+'px',
+								'min-width' : minwidth+'px',
+								'white-space' : 'nowrap',
+								'z-index' : '10000'
+							}
+							if (res.results.length) {
+								$autocomplete.empty();
+								$.each(res.results, function (index, term) {
+									$('<li></li>').text(term)
+										.appendTo($autocomplete)
+										.mouseover(function () {
+											setSelectedItem(index);
+										})
+										.click(populateSearchField);
+								});
+								$autocomplete.css(style);
+								setSelectedItem(0);
+							}
+							else {
+								setSelectedItem(null);
+							}
+						});
+					} else {
+						setSelectedItem(null);
+					}
+				},300);
 			}
 			else if (event.keyCode == 38 && selectedItem !== null) {
 				setSelectedItem(selectedItem - 1);
