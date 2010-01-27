@@ -11,7 +11,7 @@ print 	'<html>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <title>GiantDisc Web Interface v2: '.$title.'</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
-<script type="text/javascript" src="js/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery/jquery-1.4.1.js"></script>
 
 <script type="text/javascript" src="js/json2.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
