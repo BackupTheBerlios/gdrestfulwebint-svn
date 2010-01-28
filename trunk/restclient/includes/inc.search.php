@@ -40,7 +40,7 @@ if(isset($results[@$search])){
 	foreach($results[$search] as $res){
 		if (isset($limit)) {
 			if( (substr(strtolower($res),0,$len)===$txt) && ($i<$limit) ) {
-				$found[]=addslashes($res);
+				$found[]=htmlentities($res,ENT_COMPAT,"UTF-8");
 				$i++;
 			}
 		} else {

@@ -20,3 +20,9 @@ function filldiv(json) {
 		$("#queryresult").append(a[i]["artist"]+" - "+a[i]["title"]+"<br />");
 	}
 }
+
+function html_entity_decode(str) {
+	var  tareadummy=document.createElement('textarea');
+	tareadummy.innerHTML = str; return tareadummy.value;
+	tareadummy.parentNode.removeChild(tarea);
+}

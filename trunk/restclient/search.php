@@ -67,6 +67,7 @@ build_header("Search");
 							if (res.results.length) {
 								$autocomplete.empty();
 								$.each(res.results, function (index, term) {
+									term = html_entity_decode(term);
 									$('<li></li>').text(term)
 										.appendTo($autocomplete)
 										.mouseover(function () {
